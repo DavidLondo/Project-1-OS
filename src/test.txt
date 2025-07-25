@@ -1,0 +1,5 @@
+PID: 1, AX=2, BX=3, CX=1, Quantum=3
+PID: 2, AX=5, BX=0, CX=2, Quantum=2
+PID: 3, AX=7, BX=4, CX=3, Quantum=4
+PID: 4, AX=1, BX=2, CX=1, Quantum=3
+PID: 5, AX=0, BX=0, CX=0, Quantum=1

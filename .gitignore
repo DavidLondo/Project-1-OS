@@ -1,55 +1,81 @@
-# Prerequisites
-*.d
-
-# Object files
-*.o
-*.ko
+# --- Compilación en C/C++ ---
+*.o              # Archivos objeto
 *.obj
-*.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
+*.lo
+*.la
+*.al
 *.lib
 *.a
-*.la
-*.lo
+*.so             # Shared libraries (Linux)
+*.so.*           # Versioned shared libraries
+*.dll            # Windows dynamic libraries
+*.exe            # Ejecutables en Windows
+*.out            # Ejecutables en Linux/macOS
+*.app            # Aplicaciones macOS
+*.dSYM/          # Archivos de debug macOS
+*.elf            # Ejecutables para sistemas embebidos
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+# Archivos de depuración
+*.gcno
+*.gcda
+*.gcov
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+# Archivos de preprocesado o intermedios
+*.i
+*.ii
+*.s
+*.lst
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+# Archivos de build
+build/
+bin/
+obj/
+out/
+dist/
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+# --- VS Code ---
+.vscode/
 
-# debug information files
-*.dwo
+# --- Archivos del sistema operativo ---
+.DS_Store        # macOS
+Thumbs.db        # Windows
+desktop.ini      # Windows
+
+# --- Archivos de respaldo y temporales ---
+*~
+*.swp            # Archivos swap de Vim
+*.swo
+*.tmp
+*.bak
+*.old
+*.orig
+*.rej
+*.log
+
+# --- Archivos generados por herramientas ---
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.*
+configure
+depcomp
+install-sh
+ltmain.sh
+missing
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+
+# --- Archivos de ejecución o pruebas ---
+*.test
+*.run
+*.pid
+*.core
+core.*
+
+# --- Archivos de entorno o configuración personal ---
+.env
+*.code-workspace
+*.idea/
