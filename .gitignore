@@ -1,5 +1,6 @@
 # --- Compilación en C/C++ ---
 *.o              # Archivos objeto
+**/*.o
 *.obj
 *.lo
 *.la
