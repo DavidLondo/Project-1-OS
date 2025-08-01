@@ -1,3 +1,9 @@
+#ifndef INSTRUCTION_H
+#define INSTRUCTION_H
+
+struct Process;
+typedef struct Process Process;
+
 typedef enum {
     ADD,
     INC,
@@ -11,3 +17,8 @@ typedef struct {
     int operand2;
     int result;
 } Instruction;
+
+// Execute the instruction on each process 
+void execute_instruction(Instruction* instr, Process* proc); 
+
+#endif
