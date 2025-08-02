@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "logger.h"
 #include "Utils/Headers/aux.h"
 
 int main(int argc, char *argv[]) {
@@ -8,12 +9,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    FILE *log = fopen("logger.log", "a+");
-
-    if (log == NULL) {
-        printf("Error opening log file.\n");
-        return 1;
-    }
+    init_logger("log.txt");
 
     FILE *processes = fopen(argv[1], "r+");
     
@@ -22,21 +18,21 @@ int main(int argc, char *argv[]) {
             // while(fgets(fptr, 100, fptr)) {
             //     printf("%s", fptr);
             // }
-            fprintf(log, "File opened successfully\n");
+            log_message("File opened successfully.");
             printf("File opened successfully.\n"); // Remove later
         } else {
             printf("Error opening file.\n");
-            fprintf(log, "Error opening file");
+            log_message("Error opening file.");
             return 1;
         }
 
     //char process_list[100]; // Define size for the buffer
 
     fclose(processes);
-    fclose(log);
+    close_logger();
 
     return 0;
 }
 
 // How to log 
-// fprintf(log, "Your log message here\n");
+// log_message("This is a log message.");
