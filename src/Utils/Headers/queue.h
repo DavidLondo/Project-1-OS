@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-typedef int QueueData; // Por ahora está con INT
+typedef void* QueueData;
 
 typedef struct Queue Queue;
 

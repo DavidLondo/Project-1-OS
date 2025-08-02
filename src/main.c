@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "Utils/Headers/loader.h"
+#include "Utils/Headers/queue.h"
 #include "logger.h"
 #include "Utils/Headers/aux.h"
 
@@ -26,8 +30,10 @@ int main(int argc, char *argv[]) {
             return 1;
         }
 
-    //char process_list[100]; // Define size for the buffer
+    load_processes_from_file(processes, queue);
+    fprintf(log, "Processes load to the queue");
 
+    queue_destroy(queue);
     fclose(processes);
     close_logger();
 
