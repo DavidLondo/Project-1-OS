@@ -1,5 +1,7 @@
 #ifndef PROCESS_H
 #define PROCESS_H
+#define MAX_STATE_LEN 20
+#define MAX_INSTRUCTIONS 100
 
 #include "instruction.h"
 
@@ -8,8 +10,8 @@ typedef struct Process {
     int pc;
     int ax, bx, cx;
     int quantum;
-    char state[10];
-    Instruction* instructions;
+    char state[MAX_STATE_LEN];
+    Instruction instructions[MAX_INSTRUCTIONS];
     int num_instructions;
 } Process;
 

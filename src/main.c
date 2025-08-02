@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include "Utils/Headers/aux.h"
+#include <stdlib.h>
+
+#include "Utils/Headers/loader.h"
+#include "Utils/Headers/queue.h"
 
 int main(int argc, char *argv[]) {
 
@@ -8,35 +11,38 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    // File log
     FILE *log = fopen("logger.log", "a+");
-
     if (log == NULL) {
-        printf("Error opening log file.\n");
+        printf("Error opening logger.log\n");
         return 1;
     }
 
-    FILE *processes = fopen(argv[1], "r+");
+    // Processes file
+    FILE *processes = fopen(argv[1], "r");
+    if (processes == NULL) {
+        fprintf(log, "Error opening file: %s\n", argv[1]);
+        fclose(log);
+        return 1;            
+    }
+
+    fprintf(log, "File %s opened succesfully!\n", argv[1]);
     
-        if (processes != NULL) {
-            // Logic
-            // while(fgets(fptr, 100, fptr)) {
-            //     printf("%s", fptr);
-            // }
-            fprintf(log, "File opened successfully\n");
-            printf("File opened successfully.\n"); // Remove later
-        } else {
-            printf("Error opening file.\n");
-            fprintf(log, "Error opening file");
-            return 1;
-        }
+    // Processes queue
+    Queue* queue = queue_create();
+    if (!queue) {
+        fprintf(log, "Error making processes queue");
+        fclose(processes);
+        fclose(log);
+        return 1;
+    }
 
-    //char process_list[100]; // Define size for the buffer
+    load_processes_from_file(processes, queue);
+    fprintf(log, "Processes load to the queue");
 
+    queue_destroy(queue);
     fclose(processes);
     fclose(log);
 
     return 0;
 }
-
-// How to log 
-// fprintf(log, "Your log message here\n");
