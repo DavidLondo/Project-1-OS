@@ -29,7 +29,6 @@ void simulate_scheduler(Queue* queue) {
 
             process_print_state(p);
 
-            // NO incrementar p->pc aquí: execute_instruction ya lo hace (o lo cambia en JMP)
             quantum_remaining--;
             clock_cycle++;
             p->pc++;
