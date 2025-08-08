@@ -1,6 +1,8 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
+#define MAX_INSTRUCTIONS 1024
+
 struct Process; // Forward declaration
 typedef struct Process Process;
 

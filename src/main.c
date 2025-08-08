@@ -41,7 +41,7 @@ int main(int argc, char *argv[]) {
     load_processes_from_file(processes, queue);
     
     simulate_scheduler(queue);
-    queue_destroy(queue);
+    queue_destroy(queue, true);
     fclose(processes);
     fclose(log);
 
