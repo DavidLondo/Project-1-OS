@@ -58,5 +58,5 @@ int process_has_finished(const Process* p) {
 
 void process_print_state(const Process* p) {
     printf("  PID=%d | PC=%d | AX=%d | BX=%d | CX=%d | State=%s\n",
-        p->pid, p->pc, p->ax, p->bx, p->cx, p->state);
+        p->pid, p->pc-1, p->ax, p->bx, p->cx, p->state);
 }
