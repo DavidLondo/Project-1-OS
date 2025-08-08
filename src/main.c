@@ -3,6 +3,7 @@
 
 #include "Utils/Headers/loader.h"
 #include "Utils/Headers/queue.h"
+#include "Utils/Headers/scheduler.h"
 
 int main(int argc, char *argv[]) {
 
@@ -38,8 +39,8 @@ int main(int argc, char *argv[]) {
     }
 
     load_processes_from_file(processes, queue);
-    fprintf(log, "Processes load to the queue");
-
+    
+    simulate_scheduler(queue);
     queue_destroy(queue);
     fclose(processes);
     fclose(log);
