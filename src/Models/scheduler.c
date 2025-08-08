@@ -4,6 +4,7 @@
 #include "../Utils/Headers/scheduler.h"
 #include "../Utils/Headers/queue.h"
 #include "../Utils/Headers/process.h"
+#include "../Utils/Headers/instruction.h"  // para execute_instruction
 
 void simulate_scheduler(Queue* queue) {
     int clock_cycle = 0;
@@ -21,15 +22,18 @@ void simulate_scheduler(Queue* queue) {
         int quantum_remaining = p->quantum;
 
         while (quantum_remaining > 0 && p->pc < p->num_instructions) {
-            Instruction inst = p->instructions[p->pc];
+            Instruction* inst = &p->instructions[p->pc];
 
             printf("Cycle %d | PID %d | Executing: ", clock_cycle, p->pid);
-            process_execute_instruction(p, &inst);
+            // Llamamos a la función que ejecuta la instrucción y que actualiza el pc internamente
+            execute_instruction(inst, p);
+
             process_print_state(p);
 
-            p->pc++;
+            // NO incrementar p->pc aquí: execute_instruction ya lo hace (o lo cambia en JMP)
             quantum_remaining--;
             clock_cycle++;
+            p->pc++;
         }
 
         if (p->pc < p->num_instructions) {
