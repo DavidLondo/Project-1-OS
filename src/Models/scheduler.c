@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 #include "../Utils/Headers/scheduler.h"
@@ -18,7 +19,7 @@ void simulate_scheduler(Queue* queue) {
         }
 
         printf("\n[Context Switch] PID: %d (Quantum: %d)\n", p->pid, p->quantum);
-
+        strcpy(p->state, "Running");
         int quantum_remaining = p->quantum;
 
         while (quantum_remaining > 0 && p->pc < p->num_instructions) {
@@ -33,11 +34,15 @@ void simulate_scheduler(Queue* queue) {
             clock_cycle++;
             p->pc++;
         }
+        strcpy(p->state, "Ready");
 
         if (p->pc < p->num_instructions) {
             queue_enqueue(queue, p);
         } else {
             printf("------> PID %d has finished execution. <------\n", p->pid);
+            strcpy(p->state, "Terminated");
+            process_print_state(p);
+
             process_free(p);
         }
     }
