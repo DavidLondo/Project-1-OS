@@ -31,15 +31,37 @@ void process_free(Process* p) {
     }
 }
 
-void process_execute_instruction(Process* p) {
-    if (p->pc >= p->num_instructions) return;
+void process_execute_instruction(Process* p, Instruction* inst) {
+    int* reg;
 
-    // Process the instruction in the position of program counter
-    Instruction* instr = &p->instructions[p->pc];
-    printf("    Executing instruction [%d]: ", p->pc);
-    execute_instruction(instr, p);
-    p->pc++;
+    // Select register (operand1)
+    switch (inst->operand1) {
+        case 0: reg = &p->ax; break;
+        case 1: reg = &p->bx; break;
+        case 2: reg = &p->cx; break;
+        default: printf("Invalid operand\n"); return;
+    }
+
+    switch (inst->type) {
+        case ADD:
+            *reg += inst->operand2;
+            printf("ADD R%d, %d\n", inst->operand1, inst->operand2);
+            break;
+        case SUB:
+            *reg -= inst->operand2;
+            printf("SUB R%d, %d\n", inst->operand1, inst->operand2);
+            break;
+        case INC:
+            (*reg)++;
+            printf("INC R%d\n", inst->operand1);
+            break;
+        case NOP:
+        default:
+            printf("NOP\n");
+            break;
+    }
 }
+
 
 int process_has_finished(const Process* p) {
     return p->pc >= p->num_instructions;

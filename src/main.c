@@ -31,8 +31,8 @@ int main(int argc, char *argv[]) {
         }
 
     load_processes_from_file(processes, queue);
-    fprintf(log, "Processes load to the queue");
-
+    
+    simulate_scheduler(queue);
     queue_destroy(queue);
     fclose(processes);
     close_logger();
