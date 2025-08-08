@@ -15,9 +15,8 @@ void simulate_scheduler(Queue* queue) {
             fprintf(stderr, "Error: Process Null when dequeue.\n");
             continue; 
         }
-        printf("DEBUG: puntero a proceso = %p\n", p);
 
-        printf("\n[Context Switch] PID: %d (Quantum: %d) -----------------\n", p->pid, p->quantum);
+        printf("\n[Context Switch] PID: %d (Quantum: %d)\n", p->pid, p->quantum);
 
         int quantum_remaining = p->quantum;
 
@@ -36,7 +35,7 @@ void simulate_scheduler(Queue* queue) {
         if (p->pc < p->num_instructions) {
             queue_enqueue(queue, p);
         } else {
-            printf("PID %d has finished execution.\n", p->pid);
+            printf("------> PID %d has finished execution. <------\n", p->pid);
             process_free(p);
         }
     }

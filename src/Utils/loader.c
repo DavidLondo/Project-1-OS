@@ -26,7 +26,6 @@ void load_processes_from_file(FILE* file, Queue* queue) {
         }
 
         Process* p = process_create(pid, ax, bx, cx, quantum, instructions, num_inst);
-        printf("LOADED: %p -> pid: %d quantum: %d\n", (void*)p, p->pid, p->quantum);
         queue_enqueue(queue, p);
         printf("Process %d loaded. \n", pid);
         process_print_state(p);

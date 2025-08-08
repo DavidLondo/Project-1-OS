@@ -32,14 +32,21 @@ void process_free(Process* p) {
 }
 
 void process_execute_instruction(Process* p, Instruction* inst) {
-    int* reg;
+    int* reg = NULL;
 
-    // Select register (operand1)
+    // Validar operand1 solo si aplica
+    if (inst->type == ADD || inst->type == SUB || inst->type == INC) {
+        if (inst->operand1 < 0 || inst->operand1 > 2) {
+            printf("[ERROR] Invalid operand1: %d\n", inst->operand1);
+            return;
+        }
+    }
+
+    // Seleccionar registro si es necesario
     switch (inst->operand1) {
         case 0: reg = &p->ax; break;
         case 1: reg = &p->bx; break;
         case 2: reg = &p->cx; break;
-        default: printf("Invalid operand\n"); return;
     }
 
     switch (inst->type) {
@@ -61,7 +68,6 @@ void process_execute_instruction(Process* p, Instruction* inst) {
             break;
     }
 }
-
 
 int process_has_finished(const Process* p) {
     return p->pc >= p->num_instructions;
