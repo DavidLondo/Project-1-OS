@@ -1,5 +1,5 @@
-#include "../Utils/Headers/process.h"
 #include "../Utils/Headers/instruction.h"
+#include "../Utils/Headers/process.h"  // <--- Necesario para ver la definición de Process
 #include <stdio.h>
 
 // Helper para acceder a un registro según el enum
@@ -13,6 +13,8 @@ static int* get_register_ptr(Process* proc, RegisterType reg) {
 }
 
 void execute_instruction(Instruction* instr, Process* proc) {
+    if (!instr || !proc) return;
+
     int val1 = instr->is_op1_reg ? *get_register_ptr(proc, instr->op1_reg) : instr->op1_val;
     int val2 = instr->is_op2_reg ? *get_register_ptr(proc, instr->op2_reg) : instr->op2_val;
     int* reg1_ptr = instr->is_op1_reg ? get_register_ptr(proc, instr->op1_reg) : NULL;
@@ -71,5 +73,4 @@ void execute_instruction(Instruction* instr, Process* proc) {
             printf("    [ERROR] Instrucción desconocida.\n");
             break;
     }
-
 }

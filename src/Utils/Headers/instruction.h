@@ -1,7 +1,7 @@
 #ifndef INSTRUCTION_H
 #define INSTRUCTION_H
 
-struct Process;
+struct Process; // Forward declaration
 typedef struct Process Process;
 
 // Tipos de instrucciones

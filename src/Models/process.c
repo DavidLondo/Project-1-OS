@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../Utils/Headers/process.h"
-
+#include "../Utils/Headers/instruction.h"
 
 Process* process_create(int pid, int ax, int bx, int cx, int quantum, Instruction* instructions, int num_inst) {
-    Process* p = (Process*)malloc(sizeof(Process));
-    // Variable asignation
+    Process* p = malloc(sizeof(Process));
+    if (!p) return NULL;
+
     p->pid = pid;
     p->pc = 0;
     p->ax = ax;
@@ -15,10 +16,15 @@ Process* process_create(int pid, int ax, int bx, int cx, int quantum, Instructio
     p->quantum = quantum;
     strcpy(p->state, "Ready");
     p->num_instructions = num_inst;
-    p->instructions = (Instruction*)malloc(sizeof(Instruction) * num_inst);
+
+    p->instructions = malloc(sizeof(Instruction) * num_inst);
+    if (!p->instructions) {
+        free(p);
+        return NULL;
+    }
 
     for (int i = 0; i < num_inst; ++i) {
-        p->instructions[i] = instructions[i]; // copy instructions
+        p->instructions[i] = instructions[i];
     }
 
     return p;
@@ -31,41 +37,18 @@ void process_free(Process* p) {
     }
 }
 
-void process_execute_instruction(Process* p, Instruction* inst) {
-    int* reg = NULL;
-
-    // Validar operand1 solo si aplica
-    if (inst->type == ADD || inst->type == SUB || inst->type == INC) {
-        if (inst->operand1 < 0 || inst->operand1 > 2) {
-            printf("[ERROR] Invalid operand1: %d\n", inst->operand1);
-            return;
-        }
+void process_execute_instruction(Process* p) {
+    if (p->pc < 0 || p->pc >= p->num_instructions) {
+        printf("[ERROR] PC fuera de rango: %d\n", p->pc);
+        return;
     }
 
-    // Seleccionar registro si es necesario
-    switch (inst->operand1) {
-        case 0: reg = &p->ax; break;
-        case 1: reg = &p->bx; break;
-        case 2: reg = &p->cx; break;
-    }
+    Instruction* inst = &p->instructions[p->pc];
+    execute_instruction(inst, p); // usamos la función unificada
 
-    switch (inst->type) {
-        case ADD:
-            *reg += inst->operand2;
-            printf("ADD R%d, %d\n", inst->operand1, inst->operand2);
-            break;
-        case SUB:
-            *reg -= inst->operand2;
-            printf("SUB R%d, %d\n", inst->operand1, inst->operand2);
-            break;
-        case INC:
-            (*reg)++;
-            printf("INC R%d\n", inst->operand1);
-            break;
-        case NOP:
-        default:
-            printf("NOP\n");
-            break;
+    // Si no fue un salto, avanzamos PC
+    if (inst->type != INST_JMP) {
+        p->pc++;
     }
 }
 
