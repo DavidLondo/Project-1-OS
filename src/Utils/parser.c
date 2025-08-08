@@ -62,16 +62,20 @@ int load_instructions_from_file(int pid, Instruction* instructions) {
         // Trim leading spaces
         char* p = line;
         while (*p == ' ' || *p == '\t') p++;
+
         // Skip empty or comments
         if (*p == '\0' || *p == '\n' || *p == '#') continue;
 
-        // Tokenize: op, arg1, arg2
         char op[16] = {0}, arg1[32] = {0}, arg2[32] = {0};
-        int num_tokens = sscanf(p, "%15s %31s %31s", op, arg1, arg2);
+        Instruction instr = {0};
 
-        Instruction instr;
-        // Inicializar campos
-        instr.type = INST_NOP;
+        // Leer operación
+        if (sscanf(p, "%15s", op) != 1) {
+            continue; // línea inválida
+        }
+
+        // Inicializar campos de instrucción
+        instr.type = get_instruction_type(op);
         instr.op1_reg = REG_NONE;
         instr.op2_reg = REG_NONE;
         instr.op1_val = 0;
@@ -79,31 +83,30 @@ int load_instructions_from_file(int pid, Instruction* instructions) {
         instr.is_op1_reg = 0;
         instr.is_op2_reg = 0;
 
-        instr.type = get_instruction_type(op);
-
         switch (instr.type) {
             case INST_ADD:
             case INST_SUB:
             case INST_MUL: {
+                // Intentar con coma pegada o no
+                int num_tokens = sscanf(p, "%15s %31[^,],%31s", op, arg1, arg2);
                 if (num_tokens < 2) {
-                    fprintf(stderr, "Malformed line (missing operands) in %s: %s", filename, line);
-                    continue;
+                    num_tokens = sscanf(p, "%15s %31s %31s", op, arg1, arg2);
                 }
+                strip_comma(arg1);
+                strip_comma(arg2);
+
                 RegisterType dst;
-                if (num_tokens >= 2) strip_comma(arg1);
-                if (num_tokens >= 3) strip_comma(arg2);
                 if (!parse_register(arg1, &dst)) {
-                    fprintf(stderr, "Destination must be a register for %s: %s\n", op, line);
+                    fprintf(stderr, "Destino debe ser registro para %s: %s\n", op, line);
                     continue;
                 }
                 instr.op1_reg = dst;
                 instr.is_op1_reg = 1;
-                
-                // Segundo operando: puede ser registro o número
+
+                // Segundo operando
                 if (num_tokens >= 3 && parse_register(arg2, &instr.op2_reg)) {
                     instr.is_op2_reg = 1;
                 } else {
-                    // intentar parsear como int
                     instr.op2_val = (num_tokens >= 3) ? atoi(arg2) : 0;
                     instr.is_op2_reg = 0;
                 }
@@ -111,7 +114,8 @@ int load_instructions_from_file(int pid, Instruction* instructions) {
             }
 
             case INST_INC: {
-                if (num_tokens < 2) {
+                // Solo un operando, sin coma
+                if (sscanf(p, "%15s %31s", op, arg1) < 2) {
                     fprintf(stderr, "INC requiere un registro: %s\n", line);
                     continue;
                 }
@@ -126,7 +130,7 @@ int load_instructions_from_file(int pid, Instruction* instructions) {
             }
 
             case INST_JMP: {
-                if (num_tokens < 2) {
+                if (sscanf(p, "%15s %31s", op, arg1) < 2) {
                     fprintf(stderr, "JMP requiere un número objetivo: %s\n", line);
                     continue;
                 }
@@ -141,9 +145,7 @@ int load_instructions_from_file(int pid, Instruction* instructions) {
                 break;
         }
 
-        // Guardar instrucción
-        instructions[count] = instr;
-        count++;
+        instructions[count++] = instr;
     }
 
     fclose(file);
