@@ -63,8 +63,8 @@ make
 ## Uso
 
 1. Asegúrate de que en la carpeta instructions/ existan los archivos con las instrucciones correspondientes a los PIDs que aparecerán en tu archivo de entrada (por ejemplo 1.txt, 2.txt, etc.).
-
-2. Desde la carpeta raíz del proyecto, después de compilar, ejecuta:
+2. Es neceario que en la misma carpeta donde se encuentre app, exista una carpeta /instructions la cual almacene todos los *.txt de las instruciones 
+3. Desde la carpeta raíz del proyecto, después de compilar, ejecuta:
 
 ```bash
 cd build
